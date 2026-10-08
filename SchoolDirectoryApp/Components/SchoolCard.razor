@@ -1,0 +1,21 @@
+﻿@using SchoolDirectoryApp.Models
+
+<div class="card h-100 @(IsSelected ? "border-primary" : "")">
+    <div class="card-body">
+        <h5 class="card-title">@School.SchoolName</h5>
+        <p class="card-text mb-1"><strong>Address:</strong> @School.Address</p>
+        <p class="card-text mb-1"><strong>Phone:</strong> @School.PhoneNo</p>
+        <p class="card-text"><strong>Email:</strong> @School.EmailAddress</p>
+    </div>
+    <div class="card-footer bg-transparent">
+        <button class="btn btn-sm btn-primary" @onclick="SelectAsync">View details</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public School School { get; set; } = default!;
+    [Parameter] public EventCallback<School> OnSelect { get; set; }
+    [Parameter] public bool IsSelected { get; set; }
+
+    private Task SelectAsync() => OnSelect.InvokeAsync(School);
+}

@@ -1,0 +1,103 @@
+﻿@page "/schools"
+@rendermode InteractiveServer
+@using SchoolDirectoryApp.Models
+@using SchoolDirectoryApp.Components
+@using SchoolDirectoryApp.Services
+@inject ISchoolService SchoolService
+
+<PageTitle>School Directory</PageTitle>
+
+<h1>School Directory</h1>
+
+<div class="row g-2 mb-3">
+    <div class="col-md-6">
+        <input @bind="Search" @bind:event="oninput"
+               class="form-control" placeholder="Search school..." />
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" @bind="sortAscending">
+            <option value="true">Name A → Z</option>
+            <option value="false">Name Z → A</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-outline-primary w-100" @onclick="LoadSchoolsAsync">Refresh</button>
+    </div>
+</div>
+
+@if (error)
+{
+    <p class="text-danger">Unable to retrieve school data.</p>
+}
+else if (schools == null)
+{
+    <p>Loading schools...</p>
+}
+else
+{
+    @if (selectedSchool != null)
+    {
+        <SchoolDetails School="selectedSchool" OnClose="ClearSelection" />
+    }
+
+    <p class="text-muted">Showing @FilteredSchools.Count() of @schools.Count schools</p>
+
+    @if (!FilteredSchools.Any())
+    {
+        <p>No schools match your search.</p>
+    }
+
+    <div class="row g-3">
+        @foreach (var school in FilteredSchools)
+        {
+            <div class="col-md-6 col-lg-4" @key="school.SchoolId">
+                <SchoolCard School="school"
+                            IsSelected="@(selectedSchool?.SchoolId == school.SchoolId)"
+                            OnSelect="HandleSelect" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<School>? schools;
+    private School? selectedSchool;
+    private bool error;
+    private bool sortAscending = true;
+
+    public string Search { get; set; } = string.Empty;
+
+    private IEnumerable<School> FilteredSchools
+    {
+        get
+        {
+            var query = (schools ?? new List<School>())
+                .Where(s => s.SchoolName.Contains(Search ?? "", StringComparison.OrdinalIgnoreCase));
+
+            return sortAscending
+                ? query.OrderBy(s => s.SchoolName)
+                : query.OrderByDescending(s => s.SchoolName);
+        }
+    }
+
+    protected override async Task OnInitializedAsync() => await LoadSchoolsAsync();
+
+    private async Task LoadSchoolsAsync()
+    {
+        error = false;
+        schools = null;          // показываем "Loading schools..."
+        selectedSchool = null;
+        try
+        {
+            schools = await SchoolService.GetSchoolsAsync();
+        }
+        catch (Exception)
+        {
+            error = true;
+        }
+    }
+
+    private void HandleSelect(School school) => selectedSchool = school;
+
+    private void ClearSelection() => selectedSchool = null;
+}
