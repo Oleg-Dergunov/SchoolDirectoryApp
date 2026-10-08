@@ -1,16 +1,22 @@
 ﻿@using SchoolDirectoryApp.Models
 
-<div class="card h-100 @(IsSelected ? "border-primary" : "")">
-    <div class="card-body">
-        <h5 class="card-title">@School.SchoolName</h5>
-        <p class="card-text mb-1"><strong>Address:</strong> @School.Address</p>
-        <p class="card-text mb-1"><strong>Phone:</strong> @School.PhoneNo</p>
-        <p class="card-text"><strong>Email:</strong> @School.EmailAddress</p>
+<article class="id-card @(IsSelected ? "is-selected" : "")">
+    <div class="id-band">
+        <h3 class="id-name">@School.SchoolName</h3>
     </div>
-    <div class="card-footer bg-transparent">
-        <button class="btn btn-sm btn-primary" @onclick="SelectAsync">View details</button>
+
+    <div class="id-body">
+        <dl class="id-facts">
+            <div><dt>Head</dt><dd>@School.HeadFullName</dd></div>
+            <div><dt>Proprietor</dt><dd>@School.ProprietorFullName</dd></div>
+            <div><dt>Address</dt><dd class="clamp">@School.Address</dd></div>
+        </dl>
     </div>
-</div>
+
+    <div class="id-foot">
+        <button class="btn btn-outline-primary w-100" @onclick="SelectAsync">View details</button>
+    </div>
+</article>
 
 @code {
     [Parameter] public School School { get; set; } = default!;

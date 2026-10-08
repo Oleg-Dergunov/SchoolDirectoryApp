@@ -7,22 +7,22 @@
 
 <PageTitle>School Directory</PageTitle>
 
-<h1>School Directory</h1>
+<h1 class="mb-3">School Directory</h1>
 
-<div class="row g-2 mb-3">
-    <div class="col-md-6">
+<div class="toolbar">
+    <label class="search-field">
+        <span class="icon icon-search" aria-hidden="true"></span>
         <input @bind="Search" @bind:event="oninput"
-               class="form-control" placeholder="Search school..." />
-    </div>
-    <div class="col-md-3">
-        <select class="form-select" @bind="sortOrder">
-            <option value="asc">Name A → Z</option>
-            <option value="desc">Name Z → A</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <button class="btn btn-outline-primary w-100" @onclick="LoadSchoolsAsync">Refresh</button>
-    </div>
+               class="form-control" placeholder="Search school..."
+               aria-label="Search schools by name" />
+    </label>
+
+    <select class="form-select" @bind="sortOrder" aria-label="Sort schools">
+        <option value="asc">Name, A to Z</option>
+        <option value="desc">Name, Z to A</option>
+    </select>
+
+    <button class="btn btn-primary" @onclick="LoadSchoolsAsync">Refresh</button>
 </div>
 
 @if (error)
@@ -47,7 +47,7 @@ else
         <p>No schools match your search.</p>
     }
 
-    <div class="row g-3">
+    <div class="row g-4">
         @foreach (var school in FilteredSchools)
         {
             <div class="col-md-6 col-lg-4" @key="school.SchoolId">

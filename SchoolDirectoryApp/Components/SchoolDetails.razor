@@ -1,37 +1,49 @@
 ﻿@using SchoolDirectoryApp.Models
 
-<div class="card border-primary mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">School Details</h4>
-        <button class="btn btn-sm btn-outline-secondary" @onclick="() => OnClose.InvokeAsync()">Close</button>
-    </div>
-    <div class="card-body">
-        <dl class="row mb-0">
-            <dt class="col-sm-3">School ID</dt>
-            <dd class="col-sm-9">@School.SchoolId</dd>
+<div class="sheet-backdrop" @onclick="CloseAsync">
+    <aside class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"
+           tabindex="-1" @ref="sheet" @onkeydown="OnKeyDown" @onclick:stopPropagation="true">
 
-            <dt class="col-sm-3">School Name</dt>
-            <dd class="col-sm-9">@School.SchoolName</dd>
+        <header class="sheet-head">
+            <h2 id="sheet-title" class="sheet-title">School details</h2>
+            <button class="sheet-close" @onclick="CloseAsync" aria-label="Close details">
+                <span class="icon icon-close" aria-hidden="true"></span>
+            </button>
+        </header>
 
-            <dt class="col-sm-3">Address</dt>
-            <dd class="col-sm-9">@School.Address</dd>
-
-            <dt class="col-sm-3">Phone No</dt>
-            <dd class="col-sm-9">@School.PhoneNo</dd>
-
-            <dt class="col-sm-3">Email Address</dt>
-            <dd class="col-sm-9">@School.EmailAddress</dd>
-
-            <dt class="col-sm-3">Proprietor</dt>
-            <dd class="col-sm-9">@School.ProprietorFullName</dd>
-
-            <dt class="col-sm-3">Head</dt>
-            <dd class="col-sm-9">@School.HeadFullName</dd>
+        <dl class="sheet-body">
+            <div class="sheet-row"><dt>School ID</dt><dd>@School.SchoolId</dd></div>
+            <div class="sheet-row"><dt>School name</dt><dd>@School.SchoolName</dd></div>
+            <div class="sheet-row"><dt>Address</dt><dd>@School.Address</dd></div>
+            <div class="sheet-row"><dt>Phone no</dt><dd>@School.PhoneNo</dd></div>
+            <div class="sheet-row"><dt>Email address</dt><dd>@School.EmailAddress</dd></div>
+            <div class="sheet-row"><dt>Proprietor</dt><dd>@School.ProprietorFullName</dd></div>
+            <div class="sheet-row"><dt>Head</dt><dd>@School.HeadFullName</dd></div>
         </dl>
-    </div>
+    </aside>
 </div>
 
 @code {
     [Parameter] public School School { get; set; } = default!;
     [Parameter] public EventCallback OnClose { get; set; }
+
+    private ElementReference sheet;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await sheet.FocusAsync();
+        }
+    }
+
+    private Task CloseAsync() => OnClose.InvokeAsync();
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            await OnClose.InvokeAsync();
+        }
+    }
 }
