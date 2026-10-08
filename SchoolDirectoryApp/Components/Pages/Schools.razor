@@ -15,9 +15,9 @@
                class="form-control" placeholder="Search school..." />
     </div>
     <div class="col-md-3">
-        <select class="form-select" @bind="sortAscending">
-            <option value="true">Name A → Z</option>
-            <option value="false">Name Z → A</option>
+        <select class="form-select" @bind="sortOrder">
+            <option value="asc">Name A → Z</option>
+            <option value="desc">Name Z → A</option>
         </select>
     </div>
     <div class="col-md-3">
@@ -63,7 +63,7 @@ else
     private List<School>? schools;
     private School? selectedSchool;
     private bool error;
-    private bool sortAscending = true;
+    private string sortOrder = "asc";
 
     public string Search { get; set; } = string.Empty;
 
@@ -74,9 +74,9 @@ else
             var query = (schools ?? new List<School>())
                 .Where(s => s.SchoolName.Contains(Search ?? "", StringComparison.OrdinalIgnoreCase));
 
-            return sortAscending
-                ? query.OrderBy(s => s.SchoolName)
-                : query.OrderByDescending(s => s.SchoolName);
+            return sortOrder == "asc"
+                ? query.OrderBy(s => s.SchoolName, StringComparer.OrdinalIgnoreCase)
+                : query.OrderByDescending(s => s.SchoolName, StringComparer.OrdinalIgnoreCase);
         }
     }
 
@@ -85,7 +85,7 @@ else
     private async Task LoadSchoolsAsync()
     {
         error = false;
-        schools = null;          // показываем "Loading schools..."
+        schools = null;
         selectedSchool = null;
         try
         {
