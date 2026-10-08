@@ -1,23 +1,17 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">SchoolDirectoryApp</a>
+﻿<header class="app-header">
+    <div class="app-header-inner">
+        <a class="brand" href="">
+            <span class="brand-mark"><span class="icon icon-cap" aria-hidden="true"></span></span>
+            School Directory
+        </a>
+
+        <nav class="app-nav" aria-label="Main">
+            <NavLink href="" Match="NavLinkMatch.All">
+                <span class="icon icon-home" aria-hidden="true"></span> Home
+            </NavLink>
+            <NavLink href="schools">
+                <span class="icon icon-cap" aria-hidden="true"></span> Schools
+            </NavLink>
+        </nav>
     </div>
-</div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="schools">
-                <span class="bi bi-mortarboard-fill-nav-menu" aria-hidden="true"></span> Schools
-            </NavLink>
-        </div>
-    </nav>
-</div>
+</header>
