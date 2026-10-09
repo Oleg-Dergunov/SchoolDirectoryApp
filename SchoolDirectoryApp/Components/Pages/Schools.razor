@@ -4,6 +4,7 @@
 @using SchoolDirectoryApp.Components
 @using SchoolDirectoryApp.Services
 @inject ISchoolService SchoolService
+@inject IFavouritesService Favourites
 
 <PageTitle>School Directory</PageTitle>
 
@@ -21,6 +22,13 @@
         <option value="asc">Name, A to Z</option>
         <option value="desc">Name, Z to A</option>
     </select>
+
+    <button class="btn btn-outline-primary @(favouritesOnly ? "is-on" : "")"
+            aria-pressed="@(favouritesOnly ? "true" : "false")"
+            @onclick="ToggleFavouritesOnly">
+        <span class="icon icon-star-fill" aria-hidden="true"></span>
+        Favourites (@Favourites.Count)
+    </button>
 
     <button class="btn btn-primary" @onclick="LoadSchoolsAsync">Refresh</button>
 </div>
@@ -44,7 +52,11 @@ else
 
     @if (!FilteredSchools.Any())
     {
-        <p>No schools match your search.</p>
+        <p>
+            @(favouritesOnly && Favourites.Count == 0
+                ? "You haven't picked any favourites yet. Use the star on a school card to add one."
+                : "No schools match your search.")
+        </p>
     }
 
     <div class="row g-4">
@@ -53,7 +65,9 @@ else
             <div class="col-md-6 col-lg-4" @key="school.SchoolId">
                 <SchoolCard School="school"
                             IsSelected="@(selectedSchool?.SchoolId == school.SchoolId)"
-                            OnSelect="HandleSelect" />
+                            IsFavourite="@Favourites.IsFavourite(school.SchoolId)"
+                            OnSelect="HandleSelect"
+                            OnToggleFavourite="ToggleFavourite" />
             </div>
         }
     </div>
@@ -63,6 +77,7 @@ else
     private List<School>? schools;
     private School? selectedSchool;
     private bool error;
+    private bool favouritesOnly;
     private string sortOrder = "asc";
 
     public string Search { get; set; } = string.Empty;
@@ -74,6 +89,11 @@ else
             var query = (schools ?? new List<School>())
                 .Where(s => s.SchoolName.Contains(Search ?? "", StringComparison.OrdinalIgnoreCase));
 
+            if (favouritesOnly)
+            {
+                query = query.Where(s => Favourites.IsFavourite(s.SchoolId));
+            }
+
             return sortOrder == "asc"
                 ? query.OrderBy(s => s.SchoolName, StringComparer.OrdinalIgnoreCase)
                 : query.OrderByDescending(s => s.SchoolName, StringComparer.OrdinalIgnoreCase);
@@ -81,6 +101,15 @@ else
     }
 
     protected override async Task OnInitializedAsync() => await LoadSchoolsAsync();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Favourites.LoadAsync();
+            StateHasChanged();
+        }
+    }
 
     private async Task LoadSchoolsAsync()
     {
@@ -100,4 +129,9 @@ else
     private void HandleSelect(School school) => selectedSchool = school;
 
     private void ClearSelection() => selectedSchool = null;
+
+    private async Task ToggleFavourite(School school) =>
+        await Favourites.ToggleAsync(school.SchoolId);
+
+    private void ToggleFavouritesOnly() => favouritesOnly = !favouritesOnly;
 }

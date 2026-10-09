@@ -14,7 +14,15 @@
     </div>
 
     <div class="id-foot">
-        <button class="btn btn-outline-primary w-100" @onclick="SelectAsync">View details</button>
+        <button class="btn btn-outline-primary flex-grow-1" @onclick="SelectAsync">View details</button>
+
+        <button class="btn btn-outline-primary fav-btn @(IsFavourite ? "is-on" : "")"
+                @onclick="ToggleFavouriteAsync"
+                aria-pressed="@(IsFavourite ? "true" : "false")"
+                aria-label="Favourite @School.SchoolName"
+                title="@(IsFavourite ? "Remove from favourites" : "Add to favourites")">
+            <span class="icon @(IsFavourite ? "icon-star-fill" : "icon-star")" aria-hidden="true"></span>
+        </button>
     </div>
 </article>
 
@@ -22,6 +30,10 @@
     [Parameter] public School School { get; set; } = default!;
     [Parameter] public EventCallback<School> OnSelect { get; set; }
     [Parameter] public bool IsSelected { get; set; }
+    [Parameter] public bool IsFavourite { get; set; }
+    [Parameter] public EventCallback<School> OnToggleFavourite { get; set; }
 
     private Task SelectAsync() => OnSelect.InvokeAsync(School);
+
+    private Task ToggleFavouriteAsync() => OnToggleFavourite.InvokeAsync(School);
 }
