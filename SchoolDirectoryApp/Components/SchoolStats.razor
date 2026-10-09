@@ -1,0 +1,35 @@
+﻿@using SchoolDirectoryApp.Models
+
+<section class="stats" aria-label="School statistics">
+    <div class="stat">
+        <span class="stat-value">@TotalSchools</span>
+        <span class="stat-label">Schools</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-value">@UniqueProprietors</span>
+        <span class="stat-label">Proprietors</span>
+    </div>
+
+    <div class="stat" title="Schools where the head and the proprietor are the same person">
+        <span class="stat-value">@OwnerRunSchools</span>
+        <span class="stat-label">Owner-run</span>
+    </div>
+</section>
+
+@code {
+    [Parameter] public IReadOnlyList<School> Schools { get; set; } = Array.Empty<School>();
+
+    private int TotalSchools => Schools.Count;
+
+    private int UniqueProprietors => Schools
+        .Select(s => s.ProprietorFullName?.Trim())
+        .Where(name => !string.IsNullOrEmpty(name))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .Count();
+
+    private int OwnerRunSchools => Schools.Count(s =>
+        !string.IsNullOrWhiteSpace(s.HeadFullName) &&
+        string.Equals(s.HeadFullName.Trim(), s.ProprietorFullName?.Trim(),
+                      StringComparison.OrdinalIgnoreCase));
+}

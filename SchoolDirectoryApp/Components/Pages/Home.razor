@@ -1,4 +1,9 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@using SchoolDirectoryApp.Models
+@using SchoolDirectoryApp.Components
+@using SchoolDirectoryApp.Services
+@inject ISchoolService SchoolService
 
 <PageTitle>School Directory</PageTitle>
 
@@ -14,3 +19,35 @@
         <a class="btn btn-primary" href="schools">Browse schools</a>
     </div>
 </div>
+
+<div class="mt-5">
+    @if (error)
+    {
+        <p class="text-danger">Unable to retrieve school data.</p>
+    }
+    else if (schools == null)
+    {
+        <p>Loading statistics...</p>
+    }
+    else
+    {
+        <SchoolStats Schools="schools" />
+    }
+</div>
+
+@code {
+    private List<School>? schools;
+    private bool error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            schools = await SchoolService.GetSchoolsAsync();
+        }
+        catch (Exception)
+        {
+            error = true;
+        }
+    }
+}
