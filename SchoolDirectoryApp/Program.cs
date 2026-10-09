@@ -12,6 +12,8 @@ builder.Services.AddHttpClient<ISchoolService, SchoolService>(client =>
     client.BaseAddress = new Uri("https://edutots.net/");
 });
 
+builder.Services.AddScoped<IFavouritesService, FavouritesService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
