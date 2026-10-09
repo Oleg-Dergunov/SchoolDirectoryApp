@@ -472,7 +472,9 @@ h1:focus {
 
 .stat {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.6rem;
     background: #fff;
     border: 2px solid var(--ink);
     border-radius: 14px;
@@ -488,6 +490,7 @@ h1:focus {
 }
 
 .stat-label {
+    font-size: 1.5rem;
     color: #55627e;
 }
 
