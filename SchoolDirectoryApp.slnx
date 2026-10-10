@@ -2,5 +2,15 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Solution Items/screenshots/">
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/dashboard.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/details.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/error.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/favourites.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/list.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/loading.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/search.png" />
+    <File Path="../../../../Users/Administrator/Desktop/ScreenShots/sorting.png" />
+  </Folder>
   <Project Path="SchoolDirectoryApp/SchoolDirectoryApp.csproj" />
 </Solution>

@@ -72,3 +72,39 @@ dotnet run
 ```
 
 Then open the address shown in the console (for example `https://localhost:7262`).
+
+### 📸 Screenshots
+
+**School list loaded**
+
+![School list](screenshots/list.png)
+
+**Search**
+
+![Search](screenshots/search.png)
+
+**School details**
+
+![School details](screenshots/details.png)
+
+**Loading state**
+
+![Loading state](screenshots/loading.png)
+
+**Error state**
+
+![Error state](screenshots/error.png)
+
+**Bonus features**
+
+Statistics dashboard (home page):
+
+![Statistics dashboard](screenshots/dashboard.png)
+
+Favourites filtering:
+
+![Favourites filtering](screenshots/favourites.png)
+
+Sorting (Z to A):
+
+![Sorting Z to A](screenshots/sorting.png)
