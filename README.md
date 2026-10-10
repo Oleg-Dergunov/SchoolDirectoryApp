@@ -79,6 +79,9 @@ Then open the address shown in the console (for example `https://localhost:7262`
 
 ![School list](screenshots/list.png)
 
+Fewer points on the school card is a deliberate design decision.
+Full information about the school is in the sliding Details panel.
+
 **Search**
 
 ![Search](screenshots/search.png)
